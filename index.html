@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --menu-width: 400px;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Merriweather', serif;
+
+            overflow-x: hidden;
+        }
+
+        #video-container {
+            position: relative;
+            margin-top: 100px;
+            margin-bottom: 100px;
+            width: 100%;
+            height: calc(100vh - 200px);
+            overflow: hidden;
+            background-color: transparent;
+            z-index: 0;
+        }
+
+        #bg-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .menu-icon {
+            position: fixed;
+            top: 0.25rem;
+            right: 2rem;
+            z-index: 999;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px); /* opcional: suaviza fondo */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* da contorno sutil */
+            border-radius: 12px;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+
+        .menu-icon:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-icon img {
+            height: 120px;
+            width: auto;
+        }
+
+        @keyframes attention {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            }
+
+            50% {
+                transform: translateY(-5px) scale(1.05);
+                box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        .menu-icon {
+            animation: attention 3s ease-in-out infinite;
+        }
+
+
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100vh;
+            background-color: rgba(28, 25, 55, 0.85);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* Centra todo verticalmente */
+            align-items: center;
+            /* Centra todo horizontalmente */
+            transition: transform 0.4s ease-in-out;
+            z-index: 1000;
+            /* padding: 0.5rem 1rem; */
+            backdrop-filter: blur(10px);
+            transform: translateX(100%);
+        }
+
+
+        .side-menu.open {
+            transform: translateX(0);
+            /* Cuando se abre, el menú se desliza hacia la vista */
+        }
+
+        .side-menu .close-btn {
+            align-self: flex-end;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            margin-top: 1.5rem;
+            /* Aumenta separación desde arriba */
+            margin-right: 2.5rem;
+            /* Aumenta separación desde la derecha */
+        }
+
+
+        .side-menu .logo {
+            /* antes era 2rem, lo reducimos */
+            text-align: center;
+
+            /* agregamos un pequeño padding si deseas un poco de aire */
+        }
+
+        .side-menu .logo img {
+            height: 120px;
+            /* puedes reducir el tamaño si también quieres liberar más espacio */
+            width: auto;
+            margin: 0;
+            /* asegura que no tenga márgenes adicionales */
+            padding: 0;
+        }
+
+
+        .side-menu nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        .side-menu nav ul li a {
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: translateX(30px);
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            width: 100%;
+            /* Hace que el enlace ocupe toda la línea */
+            display: block;
+            /* Hace que el enlace ocupe toda la línea */
+            text-decoration: none;
+            /* Elimina el subrayado */
+            color: white;
+            /* Asegura que el color del texto sea blanco */
+        }
+
+        .side-menu nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .side-menu.open nav ul li a {
+            animation: slideIn 0.4s forwards;
+        }
+
+        .side-menu.open nav ul li a {
+            animation: slideIn 0.4s forwards;
+        }
+
+
+        .side-menu.open nav ul li {
+            animation: slideIn 0.4s forwards;
+        }
+
+
+
+        .side-menu.open nav ul li:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .side-menu.open nav ul li:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .side-menu.open nav ul li:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .side-menu.open nav ul li:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .side-menu.open nav ul li:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .side-menu.open nav ul li:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+
+        .social-icons {
+            display: flex;
+            justify-content: space-around;
+            margin: 1rem 0;
+            width: 100%;
+            /* Asegura que los íconos de redes se distribuyan */
+        }
+
+
+
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+
+        .contact-info {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .language-switch {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .language-switch a {
+            color: white;
+            margin: 0 0.5rem;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="video-container">
+        <video autoplay="" muted="" loop="" id="bg-video">
+            <source src="https://d3b5jsw9b8umga.cloudfront.net/surfin-legals/video/video-inicio.mp4" type="video/mp4">
+            Tu navegador no soporta la etiqueta de video.
+        </video>
+    </div>
+
+    <div class="menu-icon" onclick="toggleMenu()">
+        <img src="https://d3b5jsw9b8umga.cloudfront.net/surfin-legals/logo/surfing-legals-logo.png"
+            alt="Logo Surfing Legals" loading="lazy">
+    </div>
+
+    <div class="side-menu" id="sideMenu">
+
+        <button class="close-btn" onclick="toggleMenu()">✕</button>
+
+        <div class="logo">
+            <img src="https://d3b5jsw9b8umga.cloudfront.net/surfin-legals/logo/surfing-legals-logo.png"
+                alt="Logo Surfing Legals" loading="lazy">
+            <p><strong>Surfing Legals</strong></p>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="about-us">Nosotros</a></li>
+                <li><a href="expertise">Expertise</a></li>
+                <li><a href="abogado-de-cabecera">Abogado de cabecera</a></li>
+                <li><a href="abogado-nomada">Abogado Nómada</a></li>
+                <li><a href="shop">Eshop</a></li>
+                <li><a href="blog">Shitong Library</a></li>
+            </ul>
+        </nav>
+
+        <div>
+            <div class="social-icons">
+                <a href="#" title="Facebook"><i class="fab fa-facebook-f fa-1x"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram fa-1x"></i></a>
+                <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in fa-1x"></i></a>
+                <a href="#" title="YouTube"><i class="fab fa-youtube fa-1x"></i></a>
+            </div>
+
+
+            <div class="contact-info">
+                <p>Ciudad de México, México</p>
+                <p>Tel. +52 551234-5678</p>
+                <p><a href="mailto:info@surfing-legals.com" style="color:white;">info@surfing-legals.com</a></p>
+                <p>Todos los derechos reservados.</p>
+            </div>
+
+            <!-- <div class="language-switch">
+                <a href="#">ES</a> | <a href="#">EN</a>
+            </div> -->
+        </div>
+
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            menu.classList.toggle('open');
+        }
+
+        document.addEventListener('click', function (event) {
+            const menu = document.getElementById('sideMenu');
+            const icon = document.querySelector('.menu-icon');
+            if (!menu.contains(event.target) && !icon.contains(event.target) && menu.classList.contains('open')) {
+                menu.classList.remove('open');
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            const menu = document.getElementById('sideMenu');
+            if (event.key === 'Escape' && menu.classList.contains('open')) {
+                menu.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+
+</html>
